@@ -1,0 +1,12 @@
+import mongoose,{Schema}from'mongoose';
+const RoundSchema=new Schema({name:{type:String,required:true},durationSec:{type:Number,required:true,min:15,max:1800},passage:{type:String,required:true},state:{type:String,enum:['scheduled','countdown','live','paused','completed'],default:'scheduled'},startedAt:Date,deadlineAt:Date,pausedAt:Date,pausedMs:{type:Number,default:0}},{_id:true});
+const EventSchema=new Schema({title:{type:String,required:true,trim:true,maxlength:120},description:{type:String,default:''},code:{type:String,required:true,unique:true,index:true},status:{type:String,enum:['registration','live','completed','cancelled'],default:'registration',index:true},visibility:{type:String,enum:['public','private'],default:'public'},hostName:{type:String,default:'Event organizer'},startsAt:Date,rounds:{type:[RoundSchema],default:[]},registrations:{type:Number,default:0},capacity:{type:Number,default:100}},{timestamps:true,optimisticConcurrency:true});
+export const Event=mongoose.models.Event||mongoose.model('Event',EventSchema);
+const UserSchema=new Schema({name:{type:String,required:true,trim:true,maxlength:80},email:{type:String,required:true,lowercase:true,trim:true,unique:true,index:true},passwordHash:{type:String,required:true,select:false},role:{type:String,enum:['student','host','admin','superadmin'],default:'student'},department:{type:String,default:''},year:{type:String,default:''}},{timestamps:true});
+export const User=mongoose.models.User||mongoose.model('User',UserSchema);
+const RegistrationSchema=new Schema({eventId:{type:Schema.Types.ObjectId,required:true,ref:'Event'},userId:{type:Schema.Types.ObjectId,required:true,ref:'User'},status:{type:String,enum:['registered','approved','rejected'],default:'registered'}},{timestamps:true});
+RegistrationSchema.index({eventId:1,userId:1},{unique:true});
+export const Registration=mongoose.models.Registration||mongoose.model('Registration',RegistrationSchema);
+const ResultSchema=new Schema({eventId:{type:Schema.Types.ObjectId,required:true,index:true},roundId:{type:Schema.Types.ObjectId,required:true},userId:{type:String,required:true},displayName:{type:String,required:true},rawWpm:Number,netWpm:Number,accuracy:Number,typedChars:Number,submittedAt:{type:Date,default:Date.now}},{timestamps:true});
+ResultSchema.index({eventId:1,roundId:1,userId:1},{unique:true});
+export const Result=mongoose.models.Result||mongoose.model('Result',ResultSchema);
