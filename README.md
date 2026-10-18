@@ -38,6 +38,6 @@ The host API requires `Authorization: Bearer <JWT>` where the JWT role is `admin
 - `POST /api/uploads/signature` — host-authenticated Cloudinary signature generation.
 - Socket.IO: emit `event:join` with an event ObjectId; receive `event:state` and `leaderboard:update` updates.
 
-The dashboard still contains sample analytics and local-only typing practice; connect the official event arena to the authenticated submission API before hosting a tournament. Automated auditing, tournament qualification and publication workflows, Redis scale-out, and deployment-specific hardening remain. Sample dashboard analytics are not official records or capacity claims.
+The UI now has student signup/login, one-time administrator setup, role-aware navigation, event create/register flows, host round controls, timed typing submissions, result leaderboards, administrator player/role management, and database-backed analytics. Admins can assign `host`, `admin`, or `student` roles. Redis scale-out, full audit history, qualification/advancement workflows, and deployment-specific hardening remain before a large tournament. Remove the initial-admin setup key after bootstrap. See `LOCAL_AND_RENDER.md` for local testing and deployment.
 
 Never commit `.env`, expose server credentials in frontend variables, or paste active credentials into source control. Rotate credentials shared outside their secret manager.

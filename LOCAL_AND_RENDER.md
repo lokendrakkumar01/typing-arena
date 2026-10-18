@@ -38,14 +38,14 @@ The API surface includes student signup/login, registration, host event creation
 This repository includes a `render.yaml` Blueprint with a Node API web service and a static frontend service.
 
 1. Push this repository to GitHub and choose **New → Blueprint** in Render. Connect the repository and apply the Blueprint.
-2. On the API service, set `MONGODB_URI` to the rotated Atlas URI. Set `CLIENT_ORIGIN` to the exact deployed frontend origin (for example `https://typearena-frontend.onrender.com`, without a trailing slash).
+2. On the API service, set `MONGODB_URI` to the rotated Atlas URI. Set `CLIENT_ORIGIN` to the exact deployed frontend origin (for example `https://typearena-frontend.onrender.com`, without a trailing slash). On the static frontend service, set `VITE_API_BASE_URL` to the deployed API URL (for example `https://typearena-api.onrender.com`, without a trailing slash).
 3. Set the Cloudinary cloud name, API key, and API secret in the API service environment. Keep these values out of frontend environment variables.
 4. Render generates `JWT_SECRET` and `INITIAL_ADMIN_KEY`. Copy the initial admin key privately; use it once to call `POST https://<api-host>/api/auth/bootstrap`, then remove `INITIAL_ADMIN_KEY` from the API environment and redeploy.
 5. Wait for `/api/health` to report `database: "connected"`. If it does not, check the Atlas database user, network access list, and URI encoding for special characters.
-6. The static frontend currently serves the dashboard demo. The browser UI has not yet been wired to the API, so event creation, official registration, live scoring, and results are not end-to-end browser features yet.
+6. Confirm the frontend login page loads and the API health check responds. Register a student, bootstrap the first admin, then use Players to grant a student the host role. Test event creation, registration, round start, typing submission, and leaderboard with separate host and student sessions.
 
 Render free services can sleep when idle, so the first request after inactivity may take longer. For production competitions, choose a persistent paid instance and verify WebSocket support and database/network settings before announcing an event.
 
 ## Deployment boundary
 
-The API enforces server-side event limits, role checks, round timing, and submission scoring. Authentication and official participation workflows are not yet fully integrated into the browser UI; there is no certificate generation, complete audit workflow, qualification engine, or multi-instance Redis setup. The sample leaderboard and charts are illustrative only.
+The UI and API provide the primary student, host, and administrator flows. Certificate generation, complete audit history, qualification/advancement, and multi-instance Redis are not implemented. Verify the complete event lifecycle before running a real tournament.
