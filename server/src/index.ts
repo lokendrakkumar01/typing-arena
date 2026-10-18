@@ -12,7 +12,7 @@ import bcrypt from 'bcryptjs';
 import {Event,User,Registration,Result} from './models';
 
 const app=express(), server=http.createServer(app), origins=(process.env.CLIENT_ORIGIN||'http://localhost:5173').split(',').map(value=>value.trim().replace(/\/$/,''));
-const corsOptions={origin:(requestOrigin:string|undefined,callback:(error:Error|null,allow?:boolean)=>void)=>{if(!requestOrigin||origins.includes(requestOrigin.replace(/\/$/,''))){callback(null,true);return}callback(new Error('Origin is not allowed by CLIENT_ORIGIN'))},methods:['GET','POST','PATCH','OPTIONS'],allowedHeaders:['Content-Type','Authorization']};
+const corsOptions={origin:(requestOrigin:string|undefined,callback:(error:Error|null,allow?:boolean)=>void)=>{if(!requestOrigin||origins.includes(requestOrigin.replace(/\/$/,''))){callback(null,true);return}callback(new Error('Origin is not allowed by CLIENT_ORIGIN'))},methods:['GET','POST','PATCH','DELETE','OPTIONS'],allowedHeaders:['Content-Type','Authorization']};
 const io=new Server(server,{cors:corsOptions,transports:['websocket','polling']});
 app.use(cors(corsOptions)); app.use(express.json({limit:'64kb'}));
 app.use('/api',rateLimit({windowMs:60_000,limit:120,standardHeaders:true,legacyHeaders:false}));
